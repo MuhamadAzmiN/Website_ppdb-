@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id       Int     @id @default(autoincrement()) // Menambahkan id sebagai kunci utama dengan auto-increment
+  username String  @db.VarChar(100) // Menyimpan username
+  email String @unique
+  password String  @db.VarChar(100) // Menyimpan kata sandi
+  name     String  @db.VarChar(100) // Menyimpan nama pengguna
+  asal_sekolah String @db.VarChar(100) // Menyimpan nama asal_sekolah
+  jurusan String      @db.VarChar(100)
+  nik Int
+  token    String? @db.VarChar(100) // Token opsional
+  @@map("users")  // Pemetaan ke tabel "users" di database
+}
