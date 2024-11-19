@@ -37,7 +37,7 @@ describe('POST /users/login', () => {
         await createTestUser()
     })
 
-    
+
     afterEach(async () => {
         await removeTestUser();
     })
@@ -50,10 +50,29 @@ describe('POST /users/login', () => {
         })
 
 
-        console.log(result)
-
         expect(result.status).toBe(200);
         expect(result.body.data.token).toBeDefined()
         expect(result.body.data.token).not.toBe("test")
     })
+})
+
+
+
+describe('GET /users/profile', () => {
+    beforeEach(async () => {
+        await createTestUser()
+    })
+
+    afterEach(async () => {
+        await removeTestUser()
+    })
+
+
+    it('should get', async () => {
+        const result = await supertest(web).get('/users/profile').set('Authorization', 'test')
+        expect(result.status).toBe(200)
+        expect(result.body.data.email).toBe("test@gmail.com")
+        expect(result.body.data.name).toBe("test")
+    })
+    
 })

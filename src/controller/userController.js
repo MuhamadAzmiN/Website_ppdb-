@@ -27,6 +27,19 @@ const login = async (req,res,next) => {
 }
 
 
+const getProfile = async (req,res,next) => {
+    try {
+        const result = await userService.getProfile(req.user.email)
+        res.status(200).json({
+            data : result
+        })
+        console.log(result)
+    }catch (error) {
+        next(error)
+    }
+}
+
+
 
 
 
@@ -34,5 +47,6 @@ const login = async (req,res,next) => {
 
 export default {
     register,
-    login
+    login,
+    getProfile
 }
