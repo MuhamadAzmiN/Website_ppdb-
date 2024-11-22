@@ -13,16 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id       Int     @id @default(autoincrement()) // Menambahkan id sebagai kunci utama dengan auto-increment
-  username String  @db.VarChar(100) // Menyimpan username
-  email String @unique
-  password String  @db.VarChar(100) // Menyimpan kata sandi
-  name     String  @db.VarChar(100) // Menyimpan nama pengguna
-  asal_sekolah String @db.VarChar(100) // Menyimpan nama asal_sekolah
-  jurusan String      @db.VarChar(100)
-  nik Int
-  token    String? @db.VarChar(100) // Token opsional
-  @@map("users")  // Pemetaan ke tabel "users" di database
+  id           Int      @id @default(autoincrement()) // Kunci utama dengan auto-increment
+  username     String   @db.VarChar(100)             // Menyimpan username
+  email        String   @unique                     // Email unik
+  password     String   @db.VarChar(100)            // Menyimpan kata sandi
+  name         String   @db.VarChar(100)            // Nama pengguna
+  token        String?  @db.VarChar(100)            // Token opsional
+  keterangan_lulus Boolean @default(false)          // keterangan lulus 
+  pendaftar    Daftar[]                             // Relasi ke model Daftar
+  @@map("users")                                    // Pemetaan ke tabel "users" di database
 }
+
+model Daftar {
+  id           Int      @id @default(autoincrement()) // Kunci utama dengan auto-increment
+  userId       Int                                     // Relasi ke User
+  nama_lengkap String   @db.VarChar(100)              // Nama lengkap pendaftar
+  asal_sekolah String   @db.VarChar(100)              // Asal sekolah
+  jurusan      String   @db.VarChar(100)              // Jurusan yang dipilih
+  no_hp        String   @db.VarChar(15)               // Nomor telepon pendaftar
+  alamat       String   @db.VarChar(255)              // Alamat lengkap
+  createdAt    DateTime @default(now())               // Waktu pendaftaran
+  updatedAt    DateTime @updatedAt                    // Waktu terakhir update
+  user         User     @relation(fields: [userId], references: [id]) // Relasi ke User
+  @@map("daftars")                                   // Pemetaan ke tabel "daftars" di database
+}
+
+

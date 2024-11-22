@@ -4,4 +4,4 @@ import { logger } from "./app/looging.js";
 
 const PORT  = 3000
 
-web.listen(PORT, () => logger.info(`Server running on port ${PORT}`));
+web.listen(PORT, () => logger.info(`Server running on port ${PORT}`))

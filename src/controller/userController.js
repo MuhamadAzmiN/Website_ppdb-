@@ -1,3 +1,4 @@
+import { log } from "winston";
 import userService from "../service/user-service.js";
 
 
@@ -27,6 +28,8 @@ const login = async (req,res,next) => {
 }
 
 
+
+
 const getProfile = async (req,res,next) => {
     try {
         const result = await userService.getProfile(req.user.email)
@@ -40,6 +43,19 @@ const getProfile = async (req,res,next) => {
 }
 
 
+const logout = async (req,res,next) => {
+    try {
+        await userService.logout(req.user.email)
+        res.status(200).send({
+            data : "OK"
+        })
+    }catch(e)
+    {
+        next(e)
+    }
+}
+
+
 
 
 
@@ -48,5 +64,6 @@ const getProfile = async (req,res,next) => {
 export default {
     register,
     login,
-    getProfile
+    getProfile,
+    logout
 }

@@ -11,5 +11,4 @@ web.use(publicRouter)
 
 web.use(userRouter)
 
-
 web.use(errorMiddleware)

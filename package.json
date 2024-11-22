@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "src/main.js",
   "scripts": {
-    "test": "jest -i"
+    "test": "jest -i",
+    "start": "nodemon src/main.js"
   },
   "jest": {
     "transform": {
@@ -14,7 +15,7 @@
   "license": "ISC",
   "description": "",
   "type": "module",
-"dependencies": {
+  "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcrypt": "^5.1.1",
     "express": "^4.21.1",

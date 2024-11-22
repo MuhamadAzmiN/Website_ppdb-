@@ -28,10 +28,6 @@ const register = async (request) => {
             username : true,
             email : true,
             name : true,
-            asal_sekolah : true,
-            jurusan : true,
-            nik : true
-
         }
     })
 
@@ -91,11 +87,13 @@ const getProfile = async (email) => {
         },
         select : {
             email : true,
-            name : true,
-            asal_sekolah : true,
-            jurusan : true
+            name : true, 
         }
     })
+
+
+
+
 
     console.log(user)
 
@@ -109,9 +107,37 @@ const getProfile = async (email) => {
 
 
 
+const logout = async (email) => {
+    email = validate(getUserValidation, email)
+    const user = await prismaClient.user.findUnique({
+        where : {
+            email : email
+        }
+    })
+
+
+    if(!user){
+        throw new ResponseError(404, "User not found")
+    }
+
+    return prismaClient.user.update({
+        where : {
+            email : email
+        },
+        data : {
+            token : null
+        },
+        select : {
+            email : true
+        }
+    })
+}
+
+
 export default {
     register,
     login,
-    getProfile
+    getProfile,
+    logout
 }
 
