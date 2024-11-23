@@ -19,8 +19,10 @@ model User {
   email        String   @unique                     // Email unik
   password     String   @db.VarChar(100)            // Menyimpan kata sandi
   name         String   @db.VarChar(100)            // Nama pengguna
+  role         Role     @default(user)              // role pengguna
   token        String?  @db.VarChar(100)            // Token opsional
   keterangan_lulus Boolean @default(false)          // keterangan lulus 
+  keterangan_pembayaran Boolean @default(false)          // keterangan daftar 
   pendaftar    Daftar[]                             // Relasi ke model Daftar
   @@map("users")                                    // Pemetaan ke tabel "users" di database
 }
@@ -40,3 +42,9 @@ model Daftar {
 }
 
 
+
+
+enum Role {
+  user
+  admin
+}

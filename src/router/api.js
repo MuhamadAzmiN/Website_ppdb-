@@ -10,7 +10,7 @@ userRouter.use(authMiddleware)
 userRouter.get("/users/profile", userController.getProfile)
 userRouter.post("/users/daftar", daftarController.daftar)
 userRouter.delete("/users/logout", userController.logout)
-userRouter.get("/users/daftar/:daftarId", daftarController.getDaftarUser)
+userRouter.get("/users/daftar/:nama_lengkap", daftarController.getDaftarUser)
 
 export {
     userRouter

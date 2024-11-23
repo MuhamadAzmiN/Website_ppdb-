@@ -28,6 +28,7 @@ const register = async (request) => {
             username : true,
             email : true,
             name : true,
+            token : true
         }
     })
 
@@ -88,6 +89,11 @@ const getProfile = async (email) => {
         select : {
             email : true,
             name : true, 
+            username : true,
+            keterangan_lulus : true,
+            keterangan_pembayaran : true
+        
+            
         }
     })
 
@@ -119,6 +125,9 @@ const logout = async (email) => {
     if(!user){
         throw new ResponseError(404, "User not found")
     }
+
+
+
 
     return prismaClient.user.update({
         where : {

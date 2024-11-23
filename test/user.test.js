@@ -38,7 +38,6 @@ describe('POST /users/login', () => {
             email : "test@gmail.com",
             password : "test"
         })
-        console.log(result.status)
         expect(result.status).toBe(200);
         expect(result.body.data.token).toBeDefined()
         expect(result.body.data.token).not.toBe("test")
@@ -81,7 +80,7 @@ describe('DELETE /users/logout', () => {
 
     it('should can logout', async () => {
         const result = await supertest(web).delete("/users/logout").set('Authorization', "test")
-        console.log(result)
+
         expect(result.status).toBe(200)
         expect(result.body.data).toBe("OK")
 

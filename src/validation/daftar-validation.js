@@ -9,7 +9,9 @@ const daftarValidation = Joi.object({
     alamat: Joi.string().required(),
 });
 
-const getDaftarValidation = Joi.number().positive().required();
+const getDaftarValidation = Joi.string().required(); // Nama lengkap seharusnya string
+
+
 
 export {
     daftarValidation,

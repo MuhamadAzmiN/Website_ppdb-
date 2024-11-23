@@ -39,6 +39,38 @@ describe('POST /users/daftar', () => {
     })
 
 
+    it('should daftar a user', async () => {    
+        let result = await supertest(web).post('/users/daftar').set('Authorization', 'test').send({
+            nama_lengkap : "test",
+            asal_sekolah : "test",
+            jurusan      : "test",
+            no_hp        : "081234567890", // Diganti agar valid    
+            alamat       : "test"
+        });
+
+        expect(result.status).toBe(201);
+        expect(result.body.data.nama_lengkap).toBe("test");
+        expect(result.body.data.asal_sekolah).toBe("test");
+        expect(result.body.data.jurusan).toBe("test");
+        expect(result.body.data.no_hp).toBe("081234567890");
+        expect(result.body.data.alamat).toBe("test");
+
+
+        result = await supertest(web).post('/users/daftar').set('Authorization', 'test').send({
+            nama_lengkap : "test",
+            asal_sekolah : "test",
+            jurusan      : "test",
+            no_hp        : "081234567890", // Diganti agar valid    
+            alamat       : "test"
+        })
+
+        expect(result.status).toBe(400)
+        expect(result.body.errors).toBeDefined()
+
+
+    })
+
+
     it('should project request valid', async () => {
         const result = await supertest(web).post('/users/daftar').set('Authorization', 'test').send({
             nama_lengkap : "",
@@ -70,7 +102,7 @@ describe('GET /users/daftar', () => {
 
     it('should get', async () => {
         const  testDaftar = await getTestDaftar()
-        const result = await supertest(web).get('/users/daftar/' + testDaftar.id).set('Authorization', 'test')
+        const result = await supertest(web).get('/users/daftar/' + testDaftar.nama_lengkap).set('Authorization', 'test')
         expect(result.status).toBe(200)
 
         expect(result.body.data.nama_lengkap).toBe(testDaftar.nama_lengkap)

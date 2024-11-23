@@ -1,5 +1,6 @@
 import { prismaClient } from "../src/app/database";
 import bcrypt from "bcrypt"
+import { ResponseError } from "../src/error/response-error";
 
 
 export const removeTestUser = async () => {
@@ -42,6 +43,8 @@ export const getTestUser = async () => {
   
 
 
+
+
 export const removeAllTextDaftar =  async () => {
     await prismaClient.daftar.deleteMany({
         where : {
@@ -78,15 +81,95 @@ export const createTestDaftar = async () => {
 
 
 export const getTestDaftar = async () => {
-    try {
-        const result = await prismaClient.daftar.findFirst({
-            where: {
-                nama_lengkap: "test"
-            }
-        });
-        return result;
-    } catch (error) {
-        console.error("Error fetching data: ", error);
-        throw new Error("Failed to fetch data from database");
-    }
+    
+    return await prismaClient.daftar.findFirst({
+        where: {
+          nama_lengkap: "test",
+        },
+      });
 }
+
+ 
+
+export const createTestUserAdmin = async () => {
+    await prismaClient.user.deleteMany({
+        where: {
+            email: "admin1@gmail.com"
+        }
+    });
+
+    // Buat user baru
+    return await prismaClient.user.create({
+        data: {
+            username: "admin1",
+            email: "admin1@gmail.com",
+            password: await bcrypt.hash("admin", 10),
+            name: "admin1",
+            token: "test",
+            role : "admin"
+        }
+    });
+}
+
+
+export const createTestDaftarAdmin = async () => {
+    // Pastikan createTestUser berhasil dan mendapatkan user yang valid
+    const testUser = await createTestUserAdmin();
+    
+    if (!testUser || !testUser.id) {
+        throw new Error('Test user creation failed or invalid user ID');
+    }
+  
+    await prismaClient.daftar.create({
+        data: {
+            nama_lengkap: "admin1",
+            asal_sekolah: "admin1",
+            jurusan: "admin1",
+            no_hp: "0812347890",
+            alamat: "admin1",
+            user: {
+                connect: {
+                    id: testUser.id,  // Gunakan id user yang valid
+                }
+            }
+        },
+    });
+};
+
+
+
+export const removeAllTextDaftarAdmin =  async () => {
+    await prismaClient.daftar.deleteMany({
+        where : {
+            nama_lengkap : "admin1"
+        }
+    })
+}
+
+
+export const getTestDaftarAdmin = async () => {
+    
+    return await prismaClient.daftar.findFirst({
+        where: {
+          nama_lengkap: "admin1",
+        },
+    });
+}
+
+ 
+
+
+
+
+
+
+export const removeTestUserAdmin = async () => {
+    await prismaClient.user.deleteMany({
+        where : {
+            username : "admin1"
+        }
+    })
+}
+
+
+

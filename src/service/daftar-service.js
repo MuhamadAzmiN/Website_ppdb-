@@ -10,7 +10,20 @@ const daftar = async (user, request) => {
     const daftar = validate(daftarValidation, request);
     daftar.userId = user.id;
 
-    // Simpan data ke databaseb
+
+
+    const countDaftar = await prismaClient.daftar.count({
+        where: {
+            userId: user.id
+        }
+    })
+
+
+    if(countDaftar == 1){
+        throw new ResponseError(400, "Daftar already exist")
+    }
+    
+
     return await prismaClient.daftar.create({
         data: daftar,
         select: {
@@ -24,36 +37,37 @@ const daftar = async (user, request) => {
 };
 
 
-const getDaftarUser = async (user, daftarId) => {
-    daftarId = parseInt(daftarId, 10);  // Pastikan menjadi integer
-    daftarId = validate(getDaftarValidation, daftarId)
-    console.log(daftarId)
+const getDaftarUser = async (user, namaLengkap) => {
+    // Validasi input nama_lengkap
+    namaLengkap = validate(getDaftarValidation, namaLengkap);
+    console.log(namaLengkap);
+
+    // Cari daftar berdasarkan userId dan nama_lengkap
     const daftar = await prismaClient.daftar.findFirst({
         where: {
             userId: user.id,
-            id: daftarId
+            nama_lengkap: namaLengkap
         },
-        select : {
-            id : true,
-            nama_lengkap : true,
-            asal_sekolah : true,
-            jurusan : true,
-            no_hp : true,
-            alamat : true
+        select: {
+            id: true,
+            nama_lengkap: true,
+            asal_sekolah: true,
+            jurusan: true,
+            no_hp: true,
+            alamat: true
         }
-    })  
+    })
 
-
-
-    console.log(daftar)
-    
-    if(!daftar){
-        throw new ResponseError(404, "Daftar not found")
+    // Jika daftar tidak ditemukan
+    if (!daftar) {
+        throw new ResponseError(404, "Daftar not found");
     }
 
+    return daftar;
+};
 
-    return daftar
-}
+
+
 
 
 export default {

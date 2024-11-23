@@ -14,19 +14,27 @@ const daftar = async (req,res,next) => {
 
 
 
-const getDaftarUser = async (req,res,next) => {
+const getDaftarUser = async (req, res, next) => {
     try {
-        const user = req.user
-        console.log(user)
-        const daftarId = req.params.daftarId
-        const result = await daftarService.getDaftarUser(user, daftarId)
+        const user = req.user; // Ambil informasi user login dari middleware
+        console.log("User login:", user);
+
+        const namaLengkap = req.params.nama_lengkap; // Ambil nama_lengkap dari parameter URL
+        if (!namaLengkap) {
+            return res.status(400).json({ message: "Nama lengkap is required" });
+        }
+
+        const result = await daftarService.getDaftarUser(user, namaLengkap); // Panggil service dengan nama_lengkap
         res.status(200).json({
-            data : result
-        })
-    }catch (error) {
-        next(error)
+            data: result,
+        });
+    } catch (error) {
+        next(error);
     }
-}
+};
+
+
+
 
 
 
