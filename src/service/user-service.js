@@ -143,6 +143,10 @@ const logout = async (email) => {
 }
 
 
+
+
+
+
 export default {
     register,
     login,

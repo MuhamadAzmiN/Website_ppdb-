@@ -24,17 +24,34 @@ const daftar = async (user, request) => {
     }
     
 
-    return await prismaClient.daftar.create({
-        data: daftar,
-        select: {
-            nama_lengkap: true,
-            asal_sekolah: true,
-            jurusan: true,
-            no_hp: true,
-            alamat: true
+   const createDaftar = await prismaClient.daftar.create({
+        data : daftar,
+    select : {
+            id : true,
+            nama_lengkap : true,
+            asal_sekolah : true,
+            jurusan : true,
+            no_hp : true,
+            alamat : true
         }
-    });
+    })
+    
+
+
+    await prismaClient.user.update({
+        where : {
+            id : user.id
+        },
+        data : {
+            keterangan_daftar : true
+        }
+    })
+
+
+
+    return createDaftar
 };
+
 
 
 const getDaftarUser = async (user, namaLengkap) => {
@@ -70,7 +87,23 @@ const getDaftarUser = async (user, namaLengkap) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default {
     daftar,
     getDaftarUser
 }
+

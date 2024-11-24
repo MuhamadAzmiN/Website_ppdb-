@@ -112,6 +112,21 @@ export const createTestUserAdmin = async () => {
 }
 
 
+export const getTestUserAdmin = async () => {
+    return await prismaClient.user.findUnique({
+      where: {
+        email: "admin1@gmail.com",
+    },
+ });
+};
+  
+
+
+
+
+
+
+
 export const createTestDaftarAdmin = async () => {
     // Pastikan createTestUser berhasil dan mendapatkan user yang valid
     const testUser = await createTestUserAdmin();

@@ -1,6 +1,6 @@
 import { prismaClient } from "../app/database.js"
 import { validate } from "../validation/validation.js";
-import { deleteValidationAdmin, updateValidationAdmin } from "../validation/admin-validation.js";
+import { deleteValidationAdmin, updateValidationAdmin, UserketeranganLulusValidation } from "../validation/admin-validation.js";
 import { ResponseError } from "../error/response-error.js";
 
 
@@ -13,7 +13,13 @@ const getAllDaftar = async () => {
             asal_sekolah : true,
             jurusan : true,
             no_hp : true,
-            alamat : true
+            alamat : true,
+            user : {
+                select : {
+                    email : true
+                }
+
+            }
     }
     });
 
@@ -25,6 +31,8 @@ const getAllDaftar = async () => {
 
 
 }
+
+
 
 
 
@@ -41,7 +49,7 @@ const updateDaftar = async (user,request) => {
             asal_sekolah : daftar.asal_sekolah,
             jurusan : daftar.jurusan,
             no_hp : daftar.no_hp,
-            alamat : daftar.alamat
+            alamat : daftar.alamat,
         },
         select : {
             id : true,
@@ -55,8 +63,16 @@ const updateDaftar = async (user,request) => {
 }
 
 
+
+
+
+
+
+
+
 const deleteDaftar = async (id) => {
     const daftar = validate(deleteValidationAdmin, id);
+
 
     const totalDaftarInDsatabase = await prismaClient.daftar.count({
         where : {
@@ -78,8 +94,74 @@ const deleteDaftar = async (id) => {
 }
 
 
+const getAllUser = async () => {
+    const result = await prismaClient.user.findMany({
+        select : {
+            id : true,
+            username : true,
+            email : true,
+            name : true,
+            role : true,
+            keterangan_lulus : true,
+            keterangan_pembayaran : true,
+            keterangan_daftar: true
+
+        }
+    })
 
 
+
+    if(result.length == 0){
+        throw new ResponseError(404, "User not found")
+    }
+
+
+
+    return result
+}
+
+
+
+ const userketeranganLulus = async (id) => {
+    const user = validate(UserketeranganLulusValidation, id)
+    
+    const existingUser = await prismaClient.user.findUnique({
+        where : {
+            id : user
+        }
+    })
+    
+
+    if(!existingUser) {
+        throw new ResponseError(404, "User not found")
+    }
+
+
+    if(existingUser.keterangan_lulus == true){
+        throw new ResponseError(400, "User already lulus")
+    }
+
+
+    return prismaClient.user.update({
+        where : {
+            id : user
+        },
+        data : {
+            keterangan_lulus : true
+        }
+    })
+    
+ }
+ 
+ 
+
+
+
+
+
+
+
+ 
 
 
 
@@ -96,5 +178,7 @@ const deleteDaftar = async (id) => {
 export default {
     getAllDaftar,
     updateDaftar,
-    deleteDaftar
+    deleteDaftar,
+    getAllUser,
+    userketeranganLulus
 }

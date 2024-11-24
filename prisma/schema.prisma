@@ -22,7 +22,8 @@ model User {
   role         Role     @default(user)              // role pengguna
   token        String?  @db.VarChar(100)            // Token opsional
   keterangan_lulus Boolean @default(false)          // keterangan lulus 
-  keterangan_pembayaran Boolean @default(false)          // keterangan daftar 
+  keterangan_pembayaran Boolean @default(false)         // keterangan daftar 
+  keterangan_daftar Boolean @default(false)
   pendaftar    Daftar[]                             // Relasi ke model Daftar
   @@map("users")                                    // Pemetaan ke tabel "users" di database
 }

@@ -46,11 +46,42 @@ const deleteDaftar = async (req,res,next) => {
 
 
 
+const userketeranganLulus = async (req,res,next) => {
+    try{
+        const daftarId = req.params.id
+        console.log(daftarId)
+        const result = await adminService.userketeranganLulus(daftarId)
+        res.status(200).json({
+            data : result
+        })
+    }catch (error) {
+        next(error)
+    }
+}
+
+
+
+const getAllUser = async (req,res,next) => {
+    try {
+        const result = await adminService.getAllUser()
+        res.status(200).json({
+            data : result
+        })
+    }catch (error) {
+        next(error)
+    }
+}
+
+
+
 
 
 
 export default {
     getAllDaftar,
     updateDaftar,
-    deleteDaftar
+    deleteDaftar,
+    userketeranganLulus,
+    getAllUser
+
 }
